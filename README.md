@@ -24,8 +24,8 @@ docker compose up -d
 
 Access LangGraph Studio locally via:
 
-- [http://127.0.0.1:2024](https://smith.langchain.com/studio/?baseUrl=http://127.0.0.1:2024)
-- [http://0.0.0.0:2024](https://smith.langchain.com/studio/?baseUrl=http://0.0.0.0:2024)
+- [https://smith.langchain.com/studio/?baseUrl=http://127.0.0.1:2024](https://smith.langchain.com/studio/?baseUrl=http://127.0.0.1:2024)
+- [https://smith.langchain.com/studio/?baseUrl=http://0.0.0.0:2024](https://smith.langchain.com/studio/?baseUrl=http://0.0.0.0:2024)
 
 > Open it in LangChain's hosted UI using the links above.
 
