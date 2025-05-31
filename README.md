@@ -6,5 +6,6 @@ docker compose up -d
 
 ### Access the Langgraph Studio locally through URL: 
 https://smith.langchain.com/studio/?baseUrl=http://127.0.0.1:2024
+
 https://smith.langchain.com/studio/?baseUrl=http://0.0.0.0:2024
 ### Or access OpenWebUI interface through the domain name of the clouflared tunnel, or locally through http://localhost:8080
