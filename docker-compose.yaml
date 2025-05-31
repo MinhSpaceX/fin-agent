@@ -1,0 +1,86 @@
+name: FinRobot
+
+services:
+  langgraph-agent:
+    build:
+      context: . 
+      dockerfile: Dockerfile 
+    container_name: langgraph-agent
+    environment:
+      - LANGGRAPH_AUTH=noop
+    ports:
+      - "2024:2024"
+    networks:
+      - app_network 
+    volumes:
+      - ./app:/app 
+    command: langgraph dev --host 0.0.0.0 --port 2024 --allow-blocking
+
+  proxy:
+    build:
+      context: ./backend/fastapi
+      dockerfile: Dockerfile 
+    container_name: openai-proxy
+    ports:
+      - "8000:8000" 
+    environment:
+      - LANGGRAPH_API_BASE_URL=http://langgraph-agent:2024
+    networks:
+      - app_network
+    depends_on:
+      - langgraph-agent
+    restart: unless-stopped
+
+  mcp-server:
+    build:
+      context: ./app/mcp/mcp-server
+      dockerfile: Dockerfile
+    container_name: mcp-server
+    ports:
+      - "8005:8005"
+    networks:
+      - app_network
+
+  yahoo-finance-mcp:
+    build:
+      context: ./app/mcp/yahoo-finance-mcp
+      dockerfile: Dockerfile
+    container_name: yahoo-finance-mcp
+    ports:
+      - "8003:8003"
+    networks:
+      - app_network
+
+  openwebui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: openwebui
+    ports:
+      - "8080:8080"
+    networks:
+      - app_network
+    environment:
+      - WEBUI_SECRET_KEY=""
+      - OPENAI_API_BASE_URL=http://proxy:8000/v1
+      - OPENAI_API_KEY="dont have one"
+    volumes:
+      - openwebui-data:/app/backend/data
+    depends_on:
+      - proxy 
+    restart: unless-stopped
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared-tunnel
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run --token eyJhIjoiOTdmZDAxOWI5NGE2N2IyNzg1YmJlZTFlZTQ0MDU5ODciLCJ0IjoiM2NiMjNmZjgtOTQ0ZC00MjFjLWI0NDktMTVmZTQ3MDYwMjE2IiwicyI6Ik5qTXdabUprTWprdE1tSTRNaTAwT0RBNExUZzRaR1V0WWpOaE56YzNaVEEyTURsbSJ9
+    networks:
+      - app_network
+    depends_on:
+      - openwebui 
+
+volumes:
+  openwebui-data:
+
+networks:
+  app_network:
+    driver: bridge

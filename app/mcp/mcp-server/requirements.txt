@@ -1,0 +1,5 @@
+httpx>=0.28.1
+mcp>=1.6.0
+python-dotenv>=1.0.0
+fastapi>=0.103.1
+fastmcp>=2.1.2
