@@ -72,7 +72,7 @@ services:
     image: cloudflare/cloudflared:latest
     container_name: cloudflared-tunnel
     restart: unless-stopped
-    command: tunnel --no-autoupdate run --token eyJhIjoiOTdmZDAxOWI5NGE2N2IyNzg1YmJlZTFlZTQ0MDU5ODciLCJ0IjoiM2NiMjNmZjgtOTQ0ZC00MjFjLWI0NDktMTVmZTQ3MDYwMjE2IiwicyI6Ik5qTXdabUprTWprdE1tSTRNaTAwT0RBNExUZzRaR1V0WWpOaE56YzNaVEEyTURsbSJ9
+    command: tunnel --no-autoupdate run --token YOUR_TOKEN
     networks:
       - app_network
     depends_on:
